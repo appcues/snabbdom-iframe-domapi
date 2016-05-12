@@ -1,4 +1,4 @@
-# snabbdom-iframe-domapi
+# snabbdom-iframe-domapi [![Build Status](https://travis-ci.org/appcues/snabbdom-iframe-domapi.svg?branch=master)](https://travis-ci.org/appcues/snabbdom-iframe-domapi)
 
  [Snabbdom](https://github.com/paldepind/snabbdom) allows you to provide alternative DOM implementations. This project provides a standard HTML DOM API along with iframe support, so that you can simply patch content inside of `<iframe>` elements. This allows one to do something like:
 
