@@ -1,0 +1,10 @@
+  export function createElement() {}
+  export function createElementNS() {}
+  export function createTextNode() {}
+  export function appendChild() {}
+  export function removeChild() {}
+  export function insertBefore() {}
+  export function parentNode() {}
+  export function nextSibling() {}
+  export function tagName() {}
+  export function setTextContent() {}
