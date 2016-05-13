@@ -22,9 +22,18 @@ export function insertBefore(parent, child, before) {
     dom('insertBefore', parent, child, before);
 }
 
-export function parentNode() {}
-export function nextSibling() {}
-export function tagName() {}
+export function parentNode(node) {
+    return node.parentNode;
+}
+
+export function nextSibling(node) {
+    return node.nextSibling;
+}
+
+export function tagName(node) {
+    return node.tagName;
+}
+
 export function setTextContent() {}
 
 // Perform DOM operations differently for iframes.
