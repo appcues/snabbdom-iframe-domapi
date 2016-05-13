@@ -1,4 +1,4 @@
-import * as api from '../../src';
+import api from '../../src';
 import snabbdom from 'snabbdom';
 import snabbdomClass from 'snabbdom/modules/class';
 import snabbdomProps from 'snabbdom/modules/props';
@@ -35,7 +35,7 @@ function prop(name) {
 
 var inner = prop('innerHTML');
 
-describe.only("patching iframes with snabbdom-iframe-domapi", () => {
+describe("patching iframes with snabbdom-iframe-domapi", () => {
     let patch, elm, vnode0, vnode1;
 
     before(() => {
