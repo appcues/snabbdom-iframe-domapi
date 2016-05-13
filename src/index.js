@@ -1,43 +1,45 @@
 const TEXT_CONTENT = 'textContent';
 
-export function createElement(tagName) {
-    return document.createElement(tagName);
-}
+export default {
+    createElement: function(tagName) {
+        return document.createElement(tagName);
+    },
 
-export function createElementNS(namespaceURI, tagName) {
-    return document.createElementNS(namespaceURI, tagName);
-}
+    createElementNS: function(namespaceURI, tagName) {
+        return document.createElementNS(namespaceURI, tagName);
+    },
 
-export function createTextNode(text) {
-    return document.createTextNode(text);
-}
+    createTextNode: function(text) {
+        return document.createTextNode(text);
+    },
 
-export function appendChild(parent, child) {
-    dom('appendChild', parent, child);
-}
+    appendChild: function(parent, child) {
+        dom('appendChild', parent, child);
+    },
 
-export function removeChild(parent, child) {
-    dom('removeChild', parent, child);
-}
+    removeChild: function(parent, child) {
+        dom('removeChild', parent, child);
+    },
 
-export function insertBefore(parent, child, before) {
-    dom('insertBefore', parent, child, before);
-}
+    insertBefore: function(parent, child, before) {
+        dom('insertBefore', parent, child, before);
+    },
 
-export function parentNode(node) {
-    return node.parentNode;
-}
+    parentNode: function(node) {
+        return node.parentNode;
+    },
 
-export function nextSibling(node) {
-    return node.nextSibling;
-}
+    nextSibling: function(node) {
+        return node.nextSibling;
+    },
 
-export function tagName(node) {
-    return node.tagName;
-}
+    tagName: function(node) {
+        return node.tagName;
+    },
 
-export function setTextContent(node, text) {
-    dom(TEXT_CONTENT, node, text);
+    setTextContent: function(node, text) {
+        dom(TEXT_CONTENT, node, text);
+    }
 }
 
 // Perform DOM operations differently for iframes.
