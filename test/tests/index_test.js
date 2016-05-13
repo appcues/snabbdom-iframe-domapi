@@ -1,4 +1,5 @@
 import * as api from '../../src';
+import { Promise } from 'es6-promise';
 
 describe("snabbdom-iframe-domapi", () => {
     it("should fulfill the required snabbdom interface", () => {
@@ -40,5 +41,150 @@ describe("snabbdom-iframe-domapi", () => {
         });
     });
 
+    describe("appendChild", () => {
+        it("should append one element as the child of another when the parent isn't an iframe", () => {
+            const par = api.createElement('div');
+            const el = api.createElement('h1');
+            api.appendChild(par, el);
+            expect(par.firstChild).to.deep.equal(el);
+            expect(el.parentNode).to.deep.equal(par);
+        });
+
+        it("should append a child element to the body of the contentDocument of an unloaded iframe", () => {
+            const par = api.createElement('iframe');
+            const el = api.createElement('h1');
+            api.appendChild(par, el);
+            document.body.appendChild(par);
+            return waitReady(par).then((iframe) => {
+                expect(iframe.contentDocument.body.firstChild).to.deep.equal(el);
+                expect(el.parentNode).to.deep.equal(iframe.contentDocument.body);
+            });
+        });
+
+        it("should append a child element to the body of the contentDocument of a loaded iframe", () => {
+            const par = api.createElement('iframe');
+            document.body.appendChild(par);
+            return waitReady(par).then((iframe) => {
+                const el = api.createElement('h1');
+                api.appendChild(iframe, el);
+                expect(iframe.contentDocument.body.firstChild).to.deep.equal(el);
+                expect(el.parentNode).to.deep.equal(iframe.contentDocument.body);
+            });
+        });
+    });
+
+    describe("removeChild", () => {
+        it("should remove a child element from it's parent", () => {
+            const par = api.createElement('div');
+            const el = api.createElement('h1');
+            api.appendChild(par, el);
+            expect(par.firstChild).to.deep.equal(el);
+            expect(el.parentNode).to.deep.equal(par);
+            api.removeChild(par, el);
+            expect(par.firstChild).to.be.null;
+            expect(el.parentNode).to.be.null;
+        });
+
+        it("should remove a child element from the body of the contentDocument of an unloaded iframe", () => {
+            const par = api.createElement('iframe');
+            const el = api.createElement('h1');
+            api.appendChild(par, el);
+            api.removeChild(par, el);
+            document.body.appendChild(par);
+            return waitReady(par).then((iframe) => {
+                expect(iframe.contentDocument.body.firstChild).to.be.null;
+                expect(el.parentNode).to.be.null;
+            });
+        });
+
+        it("should remove a child element from the body of the contentDocument of a loaded iframe", () => {
+            const par = api.createElement('iframe');
+            document.body.appendChild(par);
+            return waitReady(par).then((iframe) => {
+                const el = api.createElement('h1');
+                api.appendChild(iframe, el);
+                expect(iframe.contentDocument.body.firstChild).to.deep.equal(el);
+                expect(el.parentNode).to.deep.equal(iframe.contentDocument.body);
+                api.removeChild(iframe, el);
+                expect(iframe.contentDocument.body.firstChild).to.be.null;
+                expect(el.parentNode).to.be.null;
+            });
+        });
+    });
+
+    describe("insertBefore", () => {
+        it("should insert a node before the specified node as a child of the parent node", () => {
+            const par = api.createElement('div');
+            const el = api.createElement('h1');
+            api.appendChild(par, el);
+            expect(par.firstChild).to.deep.equal(el);
+            expect(el.parentNode).to.deep.equal(par);
+            const el2 = api.createElement('h2');
+            api.insertBefore(par, el2, el);
+            expect(par.firstChild).to.deep.equal(el2);
+            expect(par.lastChild).to.deep.equal(el);
+            expect(el2.parentNode).to.deep.equal(par);
+            // If the "before node" is null, insert at the end.
+            const el3 = api.createElement('h3');
+            api.insertBefore(par, el3, null);
+            expect(par.lastChild).to.deep.equal(el3);
+        });
+
+        it("should insert a node before the specified node as a child of the contentDocument of an unloaded iframe", () => {
+            const par = api.createElement('iframe');
+            const el = api.createElement('h1');
+            api.appendChild(par, el);
+            const el2 = api.createElement('h2');
+            api.insertBefore(par, el2, el);
+            document.body.appendChild(par);
+            return waitReady(par).then((iframe) => {
+                expect(iframe.contentDocument.body.firstChild).to.deep.equal(el2);
+                expect(iframe.contentDocument.body.lastChild).to.deep.equal(el);
+                expect(el2.parentNode).to.deep.equal(iframe.contentDocument.body);
+            });
+        });
+
+        it("should insert a node before the specified node as a child of the contentDocument of a loaded iframe", () => {
+            const par = api.createElement('iframe');
+            document.body.appendChild(par);
+            return waitReady(par).then((iframe) => {
+                const el = api.createElement('h1');
+                api.appendChild(iframe.contentDocument.body, el);
+                expect(iframe.contentDocument.body.firstChild).to.deep.equal(el);
+                expect(el.parentNode).to.deep.equal(iframe.contentDocument.body);
+                const el2 = api.createElement('h2');
+                api.insertBefore(iframe.contentDocument.body, el2, el);
+                expect(iframe.contentDocument.body.firstChild).to.deep.equal(el2);
+                expect(iframe.contentDocument.body.lastChild).to.deep.equal(el);
+                expect(el2.parentNode).to.deep.equal(iframe.contentDocument.body);
+                // If the "before node" is null, insert at the end.
+                const el3 = api.createElement('h3');
+                api.insertBefore(iframe.contentDocument.body, el3, null);
+                expect(iframe.contentDocument.body.lastChild).to.deep.equal(el3);
+            });
+        });
+    });
 
 });
+
+// Resolves its promise when an iframe is loaded.
+function waitReady(iframe) {
+    if (iframe.contentDocument && iframe.contentDocument.readyState === 'complete') {
+        return Promise.resolve(iframe);
+    }
+    else {
+        const loadPromise = new Promise((resolve) => {
+            iframe.addEventListener('load', () => {
+                resolve(iframe);
+            });
+        });
+        const timeoutPromise = new Promise((resolve, reject) => {
+            window.setTimeout(() => {
+                reject(new Error('iframe did not load.'));
+            }, 1000);
+        });
+        // Race the iframe load event vs a timeout, to allow us to catch when
+        // the iframe doens't load for some reason.
+        return Promise.race([loadPromise, timeoutPromise]);
+    }
+}
