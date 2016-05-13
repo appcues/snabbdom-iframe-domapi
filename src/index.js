@@ -1,3 +1,5 @@
+const TEXT_CONTENT = 'textContent';
+
 export function createElement(tagName) {
     return document.createElement(tagName);
 }
@@ -34,12 +36,19 @@ export function tagName(node) {
     return node.tagName;
 }
 
-export function setTextContent() {}
+export function setTextContent(node, text) {
+    dom(TEXT_CONTENT, node, text);
+}
 
 // Perform DOM operations differently for iframes.
 function dom(op, elm, first, second) {
     if (elm.tagName !== 'IFRAME') {
-        elm[op](first, second);
+        if (op === TEXT_CONTENT) {
+            elm[TEXT_CONTENT] = first;
+        }
+        else {
+            elm[op](first, second);
+        }
     }
     else {
         // Make sure the iframe is loaded (i.e. we have contentDocument) before

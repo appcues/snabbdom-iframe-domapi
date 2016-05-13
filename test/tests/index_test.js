@@ -213,6 +213,31 @@ describe("snabbdom-iframe-domapi", () => {
         });
     });
 
+    describe("setTextContent", () => {
+        it("should set text content on an element", () => {
+            const el = api.createElement('div');
+            api.setTextContent(el, 'snabbdom!');
+            expect(el.textContent).to.equal('snabbdom!');
+        });
+
+        it("should text content on an unloaded iframe's contentDocument body", () => {
+            const el = api.createElement('iframe');
+            api.setTextContent(el, 'snabbdom!');
+            document.body.appendChild(el);
+            return waitReady(el).then((iframe) => {
+                expect(iframe.contentDocument.body.textContent).to.equal('snabbdom!');
+            });
+        });
+
+        it("should text content on a loaded iframe's contentDocument body", () => {
+            const el = api.createElement('iframe');
+            document.body.appendChild(el);
+            return waitReady(el).then((iframe) => {
+                api.setTextContent(el, 'snabbdom!');
+                expect(iframe.contentDocument.body.textContent).to.equal('snabbdom!');
+            });
+        });
+    });
 });
 
 // Resolves its promise when an iframe is loaded.
