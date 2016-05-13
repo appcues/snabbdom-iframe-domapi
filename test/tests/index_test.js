@@ -58,6 +58,7 @@ describe("snabbdom-iframe-domapi", () => {
             return waitReady(par).then((iframe) => {
                 expect(iframe.contentDocument.body.firstChild).to.deep.equal(el);
                 expect(el.parentNode).to.deep.equal(iframe.contentDocument.body);
+                document.body.removeChild(par);
             });
         });
 
@@ -69,6 +70,7 @@ describe("snabbdom-iframe-domapi", () => {
                 api.appendChild(iframe, el);
                 expect(iframe.contentDocument.body.firstChild).to.deep.equal(el);
                 expect(el.parentNode).to.deep.equal(iframe.contentDocument.body);
+                document.body.removeChild(par);
             });
         });
     });
@@ -94,6 +96,7 @@ describe("snabbdom-iframe-domapi", () => {
             return waitReady(par).then((iframe) => {
                 expect(iframe.contentDocument.body.firstChild).to.be.null;
                 expect(el.parentNode).to.be.null;
+                document.body.removeChild(par);
             });
         });
 
@@ -108,6 +111,7 @@ describe("snabbdom-iframe-domapi", () => {
                 api.removeChild(iframe, el);
                 expect(iframe.contentDocument.body.firstChild).to.be.null;
                 expect(el.parentNode).to.be.null;
+                document.body.removeChild(par);
             });
         });
     });
@@ -141,6 +145,7 @@ describe("snabbdom-iframe-domapi", () => {
                 expect(iframe.contentDocument.body.firstChild).to.deep.equal(el2);
                 expect(iframe.contentDocument.body.lastChild).to.deep.equal(el);
                 expect(el2.parentNode).to.deep.equal(iframe.contentDocument.body);
+                document.body.removeChild(par);
             });
         });
 
@@ -161,6 +166,7 @@ describe("snabbdom-iframe-domapi", () => {
                 const el3 = api.createElement('h3');
                 api.insertBefore(iframe.contentDocument.body, el3, null);
                 expect(iframe.contentDocument.body.lastChild).to.deep.equal(el3);
+                document.body.removeChild(par);
             });
         });
     });
@@ -180,6 +186,7 @@ describe("snabbdom-iframe-domapi", () => {
             document.body.appendChild(par);
             return waitReady(par).then((iframe) => {
                 expect(api.parentNode(el)).to.deep.equal(iframe.contentDocument.body);
+                document.body.removeChild(par);
             });
         });
     });
@@ -203,6 +210,7 @@ describe("snabbdom-iframe-domapi", () => {
             document.body.appendChild(par);
             return waitReady(par).then((iframe) => {
                 expect(api.nextSibling(el2)).to.deep.equal(el);
+                document.body.removeChild(par);
             });
         });
     });
@@ -226,6 +234,7 @@ describe("snabbdom-iframe-domapi", () => {
             document.body.appendChild(el);
             return waitReady(el).then((iframe) => {
                 expect(iframe.contentDocument.body.textContent).to.equal('snabbdom!');
+                document.body.removeChild(el);
             });
         });
 
@@ -235,6 +244,7 @@ describe("snabbdom-iframe-domapi", () => {
             return waitReady(el).then((iframe) => {
                 api.setTextContent(el, 'snabbdom!');
                 expect(iframe.contentDocument.body.textContent).to.equal('snabbdom!');
+                document.body.removeChild(el);
             });
         });
     });
