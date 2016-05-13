@@ -1,4 +1,4 @@
-import * as api from '../../src';
+import api from '../../src';
 import { Promise } from 'es6-promise';
 
 describe("snabbdom-iframe-domapi", () => {

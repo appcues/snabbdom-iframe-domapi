@@ -1,4 +1,4 @@
-import * as api from '../../src';
+import api from '../../src';
 import snabbdom from 'snabbdom';
 import snabbdomClass from 'snabbdom/modules/class';
 import snabbdomProps from 'snabbdom/modules/props';
