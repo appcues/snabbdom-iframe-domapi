@@ -23,3 +23,45 @@ patch(vnode1, h('iframe', [
 ```
 
 And the childNodes will be added/removed from the `contentDocument.body` of the iframe when the iframe is fully ready/loaded.
+
+## Usage
+
+### Default
+
+The default implementation simply uses the current window's `document` to create elements. This implementation is accessible as the default export.
+
+```javascript
+import domApi from 'snabbdom-iframe-domapi';
+import snabbdom from 'snabbdom';
+import snabbdomClass from 'snabbdom/modules/class';
+import snabbdomProps from 'snabbdom/modules/props';
+import snabbdomEventListeners from 'snabbdom/modules/eventlisteners';
+
+let patch = snabbdom.init([
+    snabbdomClass,
+    snabbdomProps,
+    snabbdomEventListeners
+], domApi);
+```
+
+### Options
+
+You can also specify a `clean` option to the `createApi` function. This will cause the implementation to create a new, clean Document (untouched by any changes to window globals), and it will use this "clean" document to create elements.
+
+The `createApi` function simply takes a hash of option values:
+
+```javascript
+import { createApi } from 'snabbdom-iframe-domapi';
+import snabbdom from 'snabbdom';
+import snabbdomClass from 'snabbdom/modules/class';
+import snabbdomProps from 'snabbdom/modules/props';
+import snabbdomEventListeners from 'snabbdom/modules/eventlisteners';
+
+const domApi = createApi({ clean: true });
+
+let patch = snabbdom.init([
+    snabbdomClass,
+    snabbdomProps,
+    snabbdomEventListeners
+], domApi);
+```
