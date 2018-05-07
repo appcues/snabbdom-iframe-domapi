@@ -1,4 +1,4 @@
-import api from '../../src';
+import api, { createApi } from '../../src';
 import { Promise } from 'es6-promise';
 
 describe("snabbdom-iframe-domapi", () => {
@@ -13,6 +13,15 @@ describe("snabbdom-iframe-domapi", () => {
         expect(api.nextSibling).to.be.a('function');
         expect(api.tagName).to.be.a('function');
         expect(api.setTextContent).to.be.a('function');
+    });
+
+    describe("should respect the clean option", () => {
+        const cleanApi = createApi({ clean: true});
+        const cleanEl = cleanApi.createElement("div");
+        expect(cleanEl.ownerDocument).to.not.equal(document);
+
+        const dirtyEl = api.createElement("div");
+        expect(dirtyEl.ownerDocument).to.equal(document);
     });
 
     describe("createElement", () => {

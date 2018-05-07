@@ -1,46 +1,58 @@
 const TEXT_CONTENT = 'textContent';
 
-export default {
-    createElement: function(tagName) {
-        return document.createElement(tagName);
-    },
+export function createApi(opts) {
+    let creationDoc = document;
 
-    createElementNS: function(namespaceURI, tagName) {
-        return document.createElementNS(namespaceURI, tagName);
-    },
-
-    createTextNode: function(text) {
-        return document.createTextNode(text);
-    },
-
-    appendChild: function(parent, child) {
-        dom('appendChild', parent, child);
-    },
-
-    removeChild: function(parent, child) {
-        dom('removeChild', parent, child);
-    },
-
-    insertBefore: function(parent, child, before) {
-        dom('insertBefore', parent, child, before);
-    },
-
-    parentNode: function(node) {
-        return node.parentNode;
-    },
-
-    nextSibling: function(node) {
-        return node.nextSibling;
-    },
-
-    tagName: function(node) {
-        return node.tagName;
-    },
-
-    setTextContent: function(node, text) {
-        dom(TEXT_CONTENT, node, text);
+    if (opts && opts.clean) {
+        const creationFrame = document.createElement("iframe");
+        document.head.appendChild(creationFrame);
+        creationDoc = creationFrame.contentDocument;
     }
+
+    return {
+        createElement: function(tagName) {
+            return creationDoc.createElement(tagName);
+        },
+
+        createElementNS: function(namespaceURI, tagName) {
+            return creationDoc.createElementNS(namespaceURI, tagName);
+        },
+
+        createTextNode: function(text) {
+            return creationDoc.createTextNode(text);
+        },
+
+        appendChild: function(parent, child) {
+            dom('appendChild', parent, child);
+        },
+
+        removeChild: function(parent, child) {
+            dom('removeChild', parent, child);
+        },
+
+        insertBefore: function(parent, child, before) {
+            dom('insertBefore', parent, child, before);
+        },
+
+        parentNode: function(node) {
+            return node.parentNode;
+        },
+
+        nextSibling: function(node) {
+            return node.nextSibling;
+        },
+
+        tagName: function(node) {
+            return node.tagName;
+        },
+
+        setTextContent: function(node, text) {
+            dom(TEXT_CONTENT, node, text);
+        }
+    };
 }
+
+export default createApi()
 
 // Perform DOM operations differently for iframes.
 function dom(op, elm, first, second) {
