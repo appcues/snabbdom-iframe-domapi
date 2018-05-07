@@ -1,5 +1,5 @@
 import api, { createApi } from '../../src';
-import snabbdom from 'snabbdom';
+import { init } from 'snabbdom';
 import snabbdomClass from 'snabbdom/modules/class';
 import snabbdomProps from 'snabbdom/modules/props';
 import snabbdomEventListeners from 'snabbdom/modules/eventlisteners';
@@ -41,7 +41,7 @@ var inner = prop('innerHTML');
 
         before(() => {
             // Initialize snabbdom with our API, as opposed to the default.
-            patch = snabbdom.init([
+            patch = init([
                 snabbdomClass,
                 snabbdomProps,
                 snabbdomEventListeners
