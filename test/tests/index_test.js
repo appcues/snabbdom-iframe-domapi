@@ -24,25 +24,35 @@ describe("snabbdom-iframe-domapi", () => {
         expect(dirtyEl.ownerDocument).to.equal(document);
     });
 
-    it("should use the passed in trusted types policy", () => {
-        const meta = document.createElement('meta');
-        meta.setAttribute('http-equiv','Content-Security-Policy');
-        meta.setAttribute('content', "require-trusted-types-for 'script';");
-        document.head.appendChild(meta);
-
-        const stub = sinon.stub();
-        stub.returnsArg(0);
-
-        const policy = window.trustedTypes.createPolicy('test', {
-          createHTML: stub,
-          createScript: (string) => string,
-          createScriptURL: (string) => string,
+    describe("when there is a trusted types declaration in the CSP", () => {
+        beforeEach(() => {
+            const meta = document.createElement('meta');
+            meta.setAttribute('id', 'csp-meta');
+            meta.setAttribute('http-equiv','Content-Security-Policy');
+            meta.setAttribute('content', "require-trusted-types-for 'script';");
+            document.head.appendChild(meta);
         });
-        const cleanApi = createApi({ clean: true, trustedTypesPolicy: policy });
-        const cleanEl = cleanApi.createElement("div");
-        cleanEl.innerHTML = '<span>test</span>';
-        document.body.appendChild(cleanEl);
-        expect(stub).to.have.been.called;
+
+        afterEach(() => {
+            const meta = document.getElementById('csp-meta');
+            document.head.removeChild(meta);
+        });
+
+        it("should use the passed in trusted types policy", () => {
+            const stub = sinon.stub();
+            stub.returnsArg(0);
+
+            const policy = window.trustedTypes.createPolicy('test', {
+              createHTML: stub,
+              createScript: (string) => string,
+              createScriptURL: (string) => string,
+            });
+            const cleanApi = createApi({ clean: true, trustedTypesPolicy: policy });
+            const cleanEl = cleanApi.createElement("div");
+            cleanEl.innerHTML = '<span>test</span>';
+            document.body.appendChild(cleanEl);
+            expect(stub).to.have.been.called;
+        });
     });
 
     describe("createElement", () => {
