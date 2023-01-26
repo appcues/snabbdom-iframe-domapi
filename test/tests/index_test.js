@@ -15,13 +15,34 @@ describe("snabbdom-iframe-domapi", () => {
         expect(api.setTextContent).to.be.a('function');
     });
 
-    describe("should respect the clean option", () => {
+    it("should respect the clean option", () => {
         const cleanApi = createApi({ clean: true});
         const cleanEl = cleanApi.createElement("div");
         expect(cleanEl.ownerDocument).to.not.equal(document);
 
         const dirtyEl = api.createElement("div");
         expect(dirtyEl.ownerDocument).to.equal(document);
+    });
+
+    it("should use the passed in trusted types policy", () => {
+        const meta = document.createElement('meta');
+        meta.setAttribute('http-equiv','Content-Security-Policy');
+        meta.setAttribute('content', "require-trusted-types-for 'script';");
+        document.head.appendChild(meta);
+
+        const stub = sinon.stub();
+        stub.returnsArg(0);
+
+        const policy = window.trustedTypes.createPolicy('test', {
+          createHTML: stub,
+          createScript: (string) => string,
+          createScriptURL: (string) => string,
+        });
+        const cleanApi = createApi({ clean: true, trustedTypesPolicy: policy });
+        const cleanEl = cleanApi.createElement("div");
+        cleanEl.innerHTML = '<span>test</span>';
+        document.body.appendChild(cleanEl);
+        expect(stub).to.have.been.called;
     });
 
     describe("createElement", () => {
