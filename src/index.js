@@ -7,6 +7,14 @@ export function createApi(opts) {
         const creationFrame = document.createElement("iframe");
         document.head.appendChild(creationFrame);
         creationDoc = creationFrame.contentDocument;
+        if (opts.trustedTypesPolicy) {
+            creationFrame.contentWindow.trustedTypes.createPolicy('default', {
+              createHTML: (string) =>
+                opts.trustedTypesPolicy.createHTML(string).toString(),
+              createScript: (string) => opts.trustedTypesPolicy.createScript(string).toString(),
+              createScriptURL: (string) => opts.trustedTypesPolicy.createScriptURL(string).toString(),
+            });
+        }
     }
 
     return {
