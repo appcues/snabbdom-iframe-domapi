@@ -46,9 +46,15 @@ let patch = snabbdom.init([
 
 ### Options
 
-You can also specify a `clean` option to the `createApi` function. This will cause the implementation to create a new, clean Document (untouched by any changes to window globals), and it will use this "clean" document to create elements.
+- `clean`
+  
+  You can specify a `clean` option to the `createApi` function. This will cause the implementation to create a new, clean Document (untouched by any changes to window globals), and it will use this "clean" document to create elements.
+  
+- `trustedTypesPolicy`
+  
+  You can pass a [`TrustedTypePolicy`](https://developer.mozilla.org/en-US/docs/Web/API/TrustedTypePolicy) to the `createApi` function via the `trustedTypesPolicy` option. When the `clean` option is true, this will cause the "clean" document to use that passed policy as the default policy when setting any "injection sinks." See the Trusted Types documentation for more details.
 
-The `createApi` function simply takes a hash of option values:
+To set options simply pass a hash of option values to the `createApi` function:
 
 ```javascript
 import { createApi } from 'snabbdom-iframe-domapi';
@@ -57,9 +63,10 @@ import snabbdomClass from 'snabbdom/modules/class';
 import snabbdomProps from 'snabbdom/modules/props';
 import snabbdomEventListeners from 'snabbdom/modules/eventlisteners';
 
-const domApi = createApi({ clean: true });
+const policy = window.trustedTypes.defaultPolicy;
+const domApi = createApi({ clean: true, trustedTypesPolicy: policy });
 
-let patch = snabbdom.init([
+const patch = snabbdom.init([
     snabbdomClass,
     snabbdomProps,
     snabbdomEventListeners
