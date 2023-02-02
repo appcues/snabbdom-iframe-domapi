@@ -13,7 +13,7 @@
     "url": "https://github.com/appcues/snabbdom-iframe-domapi.git"
   },
   "scripts": {
-    "prepublish": "npm run build",
+    "prepare": "npm run build",
     "build": "babel src -d lib",
     "watch": "npm run build -- --watch",
     "test": "karma start test/karma.conf.js"
