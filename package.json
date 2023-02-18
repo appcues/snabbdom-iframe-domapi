@@ -36,7 +36,7 @@
     "karma-sourcemap-loader": "^0.3.7",
     "karma-webpack": "^1.7.0",
     "knuth-shuffle": "^1.0.1",
-    "mocha": "^2.4.5",
+    "mocha": "^10.0.0",
     "sinon": "^1.17.3",
     "sinon-chai": "^2.8.0",
     "snabbdom": "^0.4.0",
