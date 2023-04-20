@@ -24,6 +24,21 @@ describe("snabbdom-iframe-domapi", () => {
         expect(dirtyEl.ownerDocument).to.equal(document);
     });
 
+    it("should handle when the creation doc is removed", () => {
+        const cleanApi = createApi({ clean: true });
+        const cleanEl = cleanApi.createElement("div");
+        expect(cleanEl.ownerDocument).to.not.equal(document);
+
+        const creationFrame = cleanEl.ownerDocument.defaultView.frameElement;
+        creationFrame.parentElement.removeChild(creationFrame);
+
+        const newCleanEl = cleanApi.createElement("div");
+        expect(newCleanEl.ownerDocument).to.not.equal(document);
+        expect(newCleanEl.ownerDocument).to.not.equal(cleanEl.ownerDocument);
+        expect(newCleanEl.ownerDocument.defaultView).to.not.equal(null);
+        expect(cleanEl.ownerDocument.defaultView).to.equal(null);
+    });
+
     describe("when there is a trusted types declaration in the CSP", () => {
         beforeEach(() => {
             const meta = document.createElement('meta');
