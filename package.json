@@ -40,7 +40,7 @@
     "sinon": "^1.17.3",
     "sinon-chai": "^2.8.0",
     "snabbdom": "^0.4.0",
-    "webpack": "^1.12.12"
+    "webpack": "^5.0.0"
   },
   "peerDependencies": {
     "snabbdom": ">0.4.0"
