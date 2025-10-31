@@ -1,5 +1,22 @@
 const TEXT_CONTENT = 'textContent';
 
+function parseFragment(
+    fragmentNode,
+    parentNode
+) {
+    const fragment = fragmentNode;
+    if(fragment.parent == null) {
+        fragment.parent = parentNode || null;
+    }
+    if(fragment.firstChildNode == null) {
+        fragment.firstChildNode = fragmentNode.firstChild;
+    }
+    if(fragment.lastChildNode == null) {
+        fragment.lastChildNode = fragmentNode.lastChild;
+    }
+    return fragment;
+}
+
 export function createApi(opts) {
     let creationDoc;
 
@@ -76,7 +93,28 @@ export function createApi(opts) {
 
         setTextContent: function(node, text) {
             dom(TEXT_CONTENT, node, text);
-        }
+        },
+        isElement: function isElement(node) {
+            return node.nodeType === 1;
+        },
+        isText: function isText(node) {
+            return node.nodeType === 3;
+        },
+        isComment: function isComment(node) {
+            return node.nodeType === 8;
+        },
+        isDocumentFragment: function isDocumentFragment(node) {
+            return node.nodeType === 11;
+        },
+        createDocumentFragment: function createDocumentFragment() {
+            return parseFragment(getCreationDoc().createDocumentFragment());
+        },
+        createComment: function createComment(text) {
+            return getCreationDoc().createComment(text);
+        },
+        getTextContent: function getTextContent(node) {
+            return node.textContent || null;
+        },
     };
 }
 
