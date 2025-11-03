@@ -31,7 +31,7 @@ And the childNodes will be added/removed from the `contentDocument.body` of the 
 The default implementation simply uses the current window's `document` to create elements. This implementation is accessible as the default export.
 
 ```javascript
-import domApi from 'snabbdom-iframe-domapi';
+import domApi from '@appcues/snabbdom-iframe-domapi';
 import snabbdom from 'snabbdom';
 import snabbdomClass from 'snabbdom/modules/class';
 import snabbdomProps from 'snabbdom/modules/props';
@@ -57,7 +57,7 @@ let patch = snabbdom.init([
 To set options simply pass a hash of option values to the `createApi` function:
 
 ```javascript
-import { createApi } from 'snabbdom-iframe-domapi';
+import { createApi } from '@appcues/snabbdom-iframe-domapi';
 import snabbdom from 'snabbdom';
 import snabbdomClass from 'snabbdom/modules/class';
 import snabbdomProps from 'snabbdom/modules/props';

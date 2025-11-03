@@ -1,10 +1,10 @@
 {
-  "name": "snabbdom-iframe-domapi",
+  "name": "@appcues/snabbdom-iframe-domapi",
   "version": "1.0.0",
   "description": "DOM API for Snabbdom with iframe support.",
   "author": {
-    "name": "Ray Di Ciaccio",
-    "email": "ray@appcues.com"
+    "name": "Appcues",
+    "email": "dev@appcues.com"
   },
   "license": "MIT",
   "bugs": "https://github.com/appcues/snabbdom-iframe-domapi/issues",
